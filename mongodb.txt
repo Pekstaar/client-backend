@@ -1,1 +1,0 @@
-mongodb+srv://pekstar:pekstar123@cluster0.eyxys.mongodb.net/<dbname>?retryWrites=true&w=majority

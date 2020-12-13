@@ -5,6 +5,7 @@ const mongoose = require("mongoose");
 const morgan = require("morgan");
 const bodyParser = require("body-parser");
 const cors = require("cors");
+const { readdirSync } = require("fs");
 require("dotenv").config();
 
 //app-create server
@@ -16,24 +17,23 @@ mongoose
     useNewUrlParser: true,
     useCreateIndex: true,
     useFindAndModify: true,
+    useUnifiedTopology: true,
   })
   .then(() => console.log("DB CONNECTION SUCCESS"))
   .catch((err) => console.log("DB CONNECTION ERROR", err));
 
 //middlewares- function running in between ie. when perfoming certain actions - use method is used
-
+//display terminal url status
 app.use(morgan("dev"));
 // body-parser allows express read the post body and parse it to a json object
 app.use(bodyParser.json({ limit: "2mb" }));
 //cors - allows restricted resources on website to be resquested from another domain
-app.use(cors);
+app.use(cors());
 
-//route
-// takes 2 arguments(url, callback to access response and request)
-app.get("/api", (res, req) => {
-  res.json({
-    data: "Node api",
-  });
-});
+// route autoload
+// prefix all routes with the /api key ie. /api/delete-user
+readdirSync("./routes").map((r) => app.use("/api", require("./routes/" + r)));
 
-const port = process.env.PORT;
+const port = process.env.PORT || 8000;
+
+app.listen(port, () => console.log(`Running server on port ${port}`));
