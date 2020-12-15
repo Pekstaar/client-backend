@@ -20,7 +20,7 @@ const userSchema = new mongoose.Schema(
     address: String,
     //   wishlist: [{ type: objectId, ref: "product" }],
   },
-  { timeStamps: true }
+  { timestamps: true }
 );
 
 module.exports = mongoose.model("User", userSchema);
