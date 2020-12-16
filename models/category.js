@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const { ObjectId } = mongoose.Schema;
+// const { ObjectId } = mongoose.Schema;
 
 const categorySchema = new mongoose.Schema(
   {
@@ -7,7 +7,7 @@ const categorySchema = new mongoose.Schema(
       type: "String",
       trim: "true",
       required: "Name is required",
-      minlength: [3, "Too short!"],
+      minlength: [2, "Too short!"],
       maxlength: [32, "Too long"],
     },
     slug: {
