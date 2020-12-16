@@ -12,7 +12,7 @@ const { createOrUpdateUser, currentUser } = require("../controllers/auth");
 //arglast - controller(callback(next) function) , arg2-midddleware
 router.post("/create-or-update-user", authCheck, createOrUpdateUser);
 router.post("/current-user", authCheck, currentUser);
-router.post("/current-admin", adminCheck, authCheck, currentUser);
+router.post("/current-admin", authCheck, adminCheck, currentUser);
 
 // const middleWare = (req, res, next) => {
 //   console.log("Im a middle ware");
