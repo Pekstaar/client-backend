@@ -8,6 +8,7 @@ admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
 });
 
+// token cheker to protect routes
 exports.authCheck = async (req, res, next) => {
   // auth token verification to firebase
   try {
@@ -31,5 +32,22 @@ exports.authCheck = async (req, res, next) => {
       error: "Invalid Token",
     });
     console.log(error.message);
+  }
+};
+
+//admin role checker
+
+exports.adminCheck = async (req, res, next) => {
+  const { email } = req.user;
+
+  const administrator = await User.findOne({ email }).exec();
+
+  if (administrator.role !== "admin") {
+    res.status(403).json({
+      err: "Admin resource access denied",
+    });
+  } else {
+    // execute the controller callback if successful
+    next();
   }
 };
