@@ -14,10 +14,37 @@ exports.create = async (req, res) => {
   }
 };
 
-exports.list = (req, res) => {};
+exports.list = async (req, res) => {
+  res.json(await Category.find({}).sort({ createdAt: -1 }).exec());
+};
 
-exports.read = (req, res) => {};
+exports.read = async (req, res) => {
+  //capture single category
+  let cat = await Category.findOne({ slug: req.params.slug }).exec();
+  res.json(cat);
+};
 
-exports.update = (req, res) => {};
+exports.update = async (req, res) => {
+  const { name } = req.body;
+  try {
+    const updated = await Category.findOneAndUpdate(
+      { slug: req.params.slug },
+      { name, slug: slugify(name) },
+      { new: true }
+    );
 
-exports.remove = (req, res) => {};
+    res.json(updated);
+  } catch (error) {
+    console.log("UPDATE ERROR", error.message);
+    res.status(400).send("Update Failed");
+  }
+};
+
+exports.remove = async (req, res) => {
+  try {
+    const toDelete = await Category.findOneAndDelete({ slug: req.params.slug });
+    res.json(toDelete);
+  } catch (e) {
+    console.log("Delete failed", e.massage);
+  }
+};
