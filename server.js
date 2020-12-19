@@ -10,6 +10,7 @@ require("dotenv").config();
 
 //app-create server
 const app = express();
+let CONN = false;
 
 // database
 mongoose
@@ -19,8 +20,14 @@ mongoose
     useFindAndModify: true,
     useUnifiedTopology: true,
   })
-  .then(() => console.log("DB CONNECTION SUCCESS"))
-  .catch((err) => console.log("DB CONNECTION ERROR", err));
+  .then(() => {
+    console.log("DB CONNECTION SUCCESS");
+    CONN = true;
+  })
+  .catch((err) => {
+    CONN = false;
+    console.log("DB CONNECTION ERROR", err.message);
+  });
 
 //middlewares- function running in between ie. when perfoming certain actions - use method is used
 //display terminal url status
@@ -33,6 +40,12 @@ app.use(cors());
 // route autoload
 // prefix all routes with the /api key ie. /api/delete-user
 readdirSync("./routes").map((r) => app.use("/api", require("./routes/" + r)));
+
+app.get("/dbconn", (req, res) => {
+  CONN
+    ? res.send("DATABASE CONNECTION ESTABLISHED!")
+    : res.send("DATABASE NOT CONNECTED!");
+});
 
 const port = process.env.PORT || 8000;
 
