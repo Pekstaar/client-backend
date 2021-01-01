@@ -1,4 +1,5 @@
 const Product = require("../models/product");
+const Brands = require("../models/brands");
 const slugify = require("slugify");
 
 exports.create = async (req, res) => {
@@ -9,6 +10,13 @@ exports.create = async (req, res) => {
     res.json(newProd);
   } catch (e) {
     console.log(e);
-    res.status(400).send("Product Creation Failed");
+    res.status(400).send(e.message);
   }
+};
+
+exports.read = async (req, res) => {
+  try {
+    //get list of items in datebase
+    res.json(await Product.find({}));
+  } catch (e) {}
 };
